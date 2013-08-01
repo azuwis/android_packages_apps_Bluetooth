@@ -351,6 +351,7 @@ final class Avrcp {
         String trackTitlePinyin = HanziToPinyin.getInstance().getFullPinYin(mMetadata.trackTitle);
         if (!trackTitlePinyin.isEmpty())
             mMetadata.trackTitle = trackTitlePinyin;
+        mMetadata.trackTitle += " - " + mMetadata.artist;
         mMetadata.albumTitle = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUM);
         if (!oldMetadata.equals(mMetadata.toString())) {
             mTrackNumber++;

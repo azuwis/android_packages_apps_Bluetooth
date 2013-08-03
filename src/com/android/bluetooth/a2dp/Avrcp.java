@@ -40,6 +40,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.content.BroadcastReceiver;
 import com.android.bluetooth.btservice.AdapterService;
@@ -1001,7 +1002,13 @@ final class Avrcp {
             }
         }
         String oldMetadata = mMetadata.toString();
-        mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
+        mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        if (TextUtils.isEmpty(mMetadata.artist)) {
+            mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
+        }
+        String artistPinyin = HanziToPinyin.getInstance().getFullPinYin(mMetadata.artist);
+        if (!artistPinyin.isEmpty())
+            mMetadata.artist = artistPinyin;
         mMetadata.trackTitle = getMdString(data, MediaMetadataRetriever.METADATA_KEY_TITLE);
         String trackTitlePinyin = HanziToPinyin.getInstance().getFullPinYin(mMetadata.trackTitle);
         if (!trackTitlePinyin.isEmpty())

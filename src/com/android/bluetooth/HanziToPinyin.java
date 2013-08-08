@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.providers.contacts;
+package com.android.bluetooth;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -176,5 +176,50 @@ public class HanziToPinyin {
         String str = sb.toString();
         tokens.add(new Token(tokenType, str, str));
         sb.setLength(0);
+    }
+
+    /**
+     * Convert the input Chinese string into full Pinyin
+     * @param source
+     * @return
+     */
+
+    public String getFullPinYin(String source) {
+        ArrayList<Token> tokens = this.get(source);
+        if (tokens == null || tokens.size() == 0) {
+            return source;
+        }
+        StringBuffer result = new StringBuffer();
+        boolean first = true;
+        for (Token token : tokens) {
+            if (token.type == Token.PINYIN) {
+                if (first)
+                    first = false;
+                else
+                    result.append(" ");
+                result.append(token.target.charAt(0) + token.target.toLowerCase().substring(1));
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Convert the input Chinese string into Pinyin abbr.
+     * @param source
+     * @return
+     */
+
+    public String getFirstPinYin(String source) {
+        ArrayList<Token> tokens = this.get(source);
+        if (tokens == null || tokens.size() == 0) {
+            return source;
+        }
+        StringBuffer result = new StringBuffer();
+        for (Token token : tokens) {
+            if (token.type == Token.PINYIN) {
+                result.append(token.target.charAt(0));
+            }
+        }
+        return result.toString();
     }
 }
